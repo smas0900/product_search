@@ -1,13 +1,12 @@
-// components/filters/ProductStatusFilter.js
-
+// src/components/filters/ProductStatusFilter.js
 import React from "react";
 
-function ProductStatusFilter({ value, onChange }) {
+function ProductStatusFilter({ filters, onFiltersChange }) {
   return (
     <select
       className="form-control mb-2"
-      value={value}
-      onChange={(e) => onChange("productStatus", e.target.value)}
+      value={filters.productStatus}
+      onChange={(e) => onFiltersChange({ ...filters, productStatus: e.target.value })}
     >
       <option value="">Product Status</option>
       <option value="Active">Active</option>

@@ -1,5 +1,4 @@
-// components/SearchBar.js
-
+// src/components/SearchBar.js
 import React from "react";
 import ProductNameFilter from "./filters/ProductNameFilter";
 import VendorFilter from "./filters/VendorFilter";
@@ -8,26 +7,29 @@ import StockStatusFilter from "./filters/StockStatusFilter";
 import ProductStatusFilter from "./filters/ProductStatusFilter";
 import StartDateFilter from "./filters/StartDateFilter";
 import EndDateFilter from "./filters/EndDateFilter";
-import initialFilters from "./filters";
 
 function SearchBar({ filters, onFiltersChange }) {
-  const handleFilterChange = (key, value) => {
-    onFiltersChange({ ...filters, [key]: value });
-  };
-
   return (
     <form className="mb-3">
-      <ProductNameFilter value={filters.productName} onChange={handleFilterChange} />
-      <VendorFilter value={filters.vendor} onChange={handleFilterChange} />
-      <OnSaleFilter value={filters.onSale} onChange={handleFilterChange} />
-      <StockStatusFilter value={filters.stockStatus} onChange={handleFilterChange} />
-      <ProductStatusFilter value={filters.productStatus} onChange={handleFilterChange} />
-      <StartDateFilter value={filters.startDate} onChange={handleFilterChange} />
-      <EndDateFilter value={filters.endDate} onChange={handleFilterChange} />
+      <ProductNameFilter filters={filters} onFiltersChange={onFiltersChange} />
+      <VendorFilter filters={filters} onFiltersChange={onFiltersChange} />
+      <OnSaleFilter filters={filters} onFiltersChange={onFiltersChange} />
+      <StockStatusFilter filters={filters} onFiltersChange={onFiltersChange} />
+      <ProductStatusFilter filters={filters} onFiltersChange={onFiltersChange} />
+      <StartDateFilter filters={filters} onFiltersChange={onFiltersChange} />
+      <EndDateFilter filters={filters} onFiltersChange={onFiltersChange} />
       <button
         type="button"
         className="btn btn-primary mt-2"
-        onClick={() => onFiltersChange(initialFilters)}
+        onClick={() => onFiltersChange({
+          productName: "",
+          vendor: "",
+          onSale: "",
+          stockStatus: "",
+          productStatus: "",
+          startDate: "",
+          endDate: ""
+        })}
       >
         Clear All Filters
       </button>

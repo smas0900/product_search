@@ -1,15 +1,16 @@
-// components/filters/ProductNameFilter.js
-
+// src/components/filters/ProductNameFilter.js
 import React from "react";
 
-function ProductNameFilter({ value, onChange }) {
+function ProductNameFilter({ filters, onFiltersChange }) {
   return (
     <input
       type="text"
       className="form-control mb-2"
       placeholder="Search by product name or SKU"
-      value={value}
-      onChange={(e) => onChange("productName", e.target.value)}
+      value={filters.productName}
+      onChange={(e) =>
+        onFiltersChange({ ...filters, productName: e.target.value })
+      }
     />
   );
 }

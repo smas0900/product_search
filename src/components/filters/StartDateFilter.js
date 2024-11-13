@@ -1,14 +1,13 @@
-// components/filters/StartDateFilter.js
-
+// src/components/filters/StartDateFilter.js
 import React from "react";
 
-function StartDateFilter({ value, onChange }) {
+function StartDateFilter({ filters, onFiltersChange }) {
   return (
     <input
       type="date"
       className="form-control mb-2"
-      value={value}
-      onChange={(e) => onChange("startDate", e.target.value)}
+      value={filters.startDate}
+      onChange={(e) => onFiltersChange({ ...filters, startDate: e.target.value })}
     />
   );
 }

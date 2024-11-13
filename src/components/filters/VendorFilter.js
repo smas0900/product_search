@@ -1,15 +1,14 @@
-// components/filters/VendorFilter.js
-
+// src/components/filters/VendorFilter.js
 import React from "react";
 
-function VendorFilter({ value, onChange }) {
+function VendorFilter({ filters, onFiltersChange }) {
   return (
     <input
       type="text"
       className="form-control mb-2"
       placeholder="Vendor Name or Vendor SKU"
-      value={value}
-      onChange={(e) => onChange("vendor", e.target.value)}
+      value={filters.vendor}
+      onChange={(e) => onFiltersChange({ ...filters, vendor: e.target.value })}
     />
   );
 }
