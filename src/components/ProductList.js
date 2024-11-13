@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import SearchBar from "./SearchBar";
-import initialFilters from "./filters";
+import initialFilters from "./SearchBar";
 import "./ProductList.css";
 
 const ProductList = () => {
