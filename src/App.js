@@ -4,41 +4,66 @@ import ProductList from './components/Products/ProductList';
 import Navbar from './components/Navigation/nav';
 
 const App = () => {
-  // Filter states
   const [productQuery, setProductQuery] = useState('');
   const [vendorQuery, setVendorQuery] = useState('');
   const [onSale, setOnSale] = useState('');
   const [stockStatus, setStockStatus] = useState('');
   const [productStatus, setProductStatus] = useState('');
-  const [products, setProducts] = useState([]); // State for holding the products
+  const [products, setProducts] = useState([]);
+  const [filteredProducts, setFilteredProducts] = useState([]);
 
-  // Fetch filtered products based on filters
+  // Fetch products from the API
   useEffect(() => {
-    const fetchFilteredProducts = async () => {
+    const fetchProducts = async () => {
       try {
-        const response = await fetch('http://localhost:5000/products', {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          // Send filters as query parameters to the server
-          body: JSON.stringify({
-            productQuery,
-            vendorQuery,
-            onSale,
-            stockStatus,
-            productStatus,
-          }),
-        });
+        const response = await fetch('http://localhost:5000/products');
         const data = await response.json();
-        setProducts(data); // Set filtered products received from the server
+        setProducts(data);
+        setFilteredProducts(data);
       } catch (error) {
-        console.error('Error fetching filtered products:', error);
+        console.error('Error fetching products:', error);
       }
     };
+    fetchProducts();
+  }, []);
 
-    fetchFilteredProducts();
-  }, [productQuery, vendorQuery, onSale, stockStatus, productStatus]);
+  // Updated useEffect to apply filters whenever filter criteria change
+  useEffect(() => {
+    let filtered = [...products];
+    console.log("Initial products:", filtered);
+  
+    if (productQuery) {
+      filtered = filtered.filter(product =>
+        product.name.toLowerCase().includes(productQuery.toLowerCase()) ||
+        product.sku.toLowerCase().includes(productQuery.toLowerCase())
+      );
+      console.log("After productQuery filter:", filtered);
+    }
+  
+    if (vendorQuery) {
+      filtered = filtered.filter(product =>
+        product.vendor.toLowerCase().includes(vendorQuery.toLowerCase())
+      );
+      console.log("After vendorQuery filter:", filtered);
+    }
+  
+    if (onSale) {
+      filtered = filtered.filter(product => product.onSale === (onSale === 'yes'));
+      console.log("After onSale filter:", filtered);
+    }
+  
+    if (stockStatus) {
+      filtered = filtered.filter(product => stockStatus === 'in_stock' ? product.qty > 0 : product.qty === 0);
+      console.log("After stockStatus filter:", filtered);
+    }
+  
+    if (productStatus) {
+      filtered = filtered.filter(product => product.status === productStatus);
+      console.log("After productStatus filter:", filtered);
+    }
+  
+    setFilteredProducts(filtered);
+  }, [products, productQuery, vendorQuery, onSale, stockStatus, productStatus]);
 
   return (
     <div className="App">
@@ -51,7 +76,7 @@ const App = () => {
         onStockStatusChange={setStockStatus}
         onProductStatusChange={setProductStatus}
       />
-      <ProductList products={products} />
+      <ProductList products={filteredProducts} />
     </div>
   );
 };
