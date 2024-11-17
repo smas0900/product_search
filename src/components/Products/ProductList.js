@@ -1,5 +1,7 @@
 // src/components/Products/ProductList.js
 import React from 'react';
+import "./ProductList.css";
+
 
 const ProductList = ({ products }) => {
   return (

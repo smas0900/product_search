@@ -37,29 +37,24 @@ const App = () => {
         product.name.toLowerCase().includes(productQuery.toLowerCase()) ||
         product.sku.toLowerCase().includes(productQuery.toLowerCase())
       );
-      console.log("After productQuery filter:", filtered);
     }
   
     if (vendorQuery) {
       filtered = filtered.filter(product =>
         product.vendor.toLowerCase().includes(vendorQuery.toLowerCase())
       );
-      console.log("After vendorQuery filter:", filtered);
     }
   
     if (onSale) {
       filtered = filtered.filter(product => product.onSale === (onSale === 'yes'));
-      console.log("After onSale filter:", filtered);
     }
   
     if (stockStatus) {
       filtered = filtered.filter(product => stockStatus === 'in_stock' ? product.qty > 0 : product.qty === 0);
-      console.log("After stockStatus filter:", filtered);
     }
   
     if (productStatus) {
       filtered = filtered.filter(product => product.status === productStatus);
-      console.log("After productStatus filter:", filtered);
     }
   
     setFilteredProducts(filtered);
