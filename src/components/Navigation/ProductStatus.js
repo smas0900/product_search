@@ -1,14 +1,19 @@
-// components/nav/ProductStatusDropdown.js
 import React from 'react';
 
-const ProductStatusDropdown = ({ productStatus, onProductStatusChange }) => {
+const ProductStatusDropdown = ({ value, onProductStatusChange }) => {
   return (
     <div className="filter">
       <label htmlFor="product-status">Product Status:</label>
-      <select id="product-status" value={productStatus} onChange={(e) => onProductStatusChange(e.target.value)}>
-        <option value="">Select</option>
-        <option value="active">Active</option>
-        <option value="inactive">Inactive</option>
+      <select
+        id="product-status"
+        value={value || ''}  
+        onChange={(e) => onProductStatusChange(e.target.value)}
+      >
+
+        <option value="">All</option>
+        <option value="Active">Active</option>
+        <option value="Acknowledged">Acknowledged</option>
+        <option value="Pending">Pending</option>
       </select>
     </div>
   );

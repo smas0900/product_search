@@ -1,4 +1,3 @@
-// components/nav/VendorSearch.js
 import React from 'react';
 
 const VendorSearch = ({ vendorQuery, onVendorQueryChange }) => {
@@ -9,7 +8,7 @@ const VendorSearch = ({ vendorQuery, onVendorQueryChange }) => {
         type="text"
         id="vendor-query"
         value={vendorQuery}
-        onChange={(e) => onVendorQueryChange(e.target.value)}
+        onChange={(e) => onVendorQueryChange(e.target.value)} // Update vendor query
         placeholder="Enter vendor name or SKU"
       />
     </div>

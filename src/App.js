@@ -10,13 +10,18 @@ const App = () => {
   const [productStatus, setProductStatus] = useState('');
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
+  
+  // Pagination states
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(3); // Customize this as per your needs
 
-  // Store the filter settings to be applied on "Apply Filters" button click
-  const [appliedFilters, setAppliedFilters] = useState({
-    onSale: '',
-    stockStatus: '',
-    productStatus: ''
-  });
+  // Track whether filters are applied
+  const isFilterApplied = 
+    productQuery || 
+    vendorQuery || 
+    onSale || 
+    stockStatus || 
+    productStatus;
 
   // Fetch products from the API
   useEffect(() => {
@@ -33,11 +38,10 @@ const App = () => {
     fetchProducts();
   }, []);
 
-  // Filter products based on user query or selected filters
-  const filterProducts = () => {
+  // Apply filters
+  const applyFilters = () => {
     let filtered = [...products];
 
-    // Filter by product name or SKU (search query for product name)
     if (productQuery) {
       filtered = filtered.filter(product =>
         product.name.toLowerCase().includes(productQuery.toLowerCase()) ||
@@ -45,46 +49,59 @@ const App = () => {
       );
     }
 
-    // Filter by vendor name or SKU (search query for vendor name)
     if (vendorQuery) {
       filtered = filtered.filter(product =>
-        product.vendor.toLowerCase().includes(vendorQuery.toLowerCase()) ||
-        product.sku.toLowerCase().includes(vendorQuery.toLowerCase())
+        product.vendor.toLowerCase().includes(vendorQuery.toLowerCase())
       );
     }
 
-    // Apply the additional filters only when "Apply Filters" is clicked
-    if (appliedFilters.onSale !== '') {
-      filtered = filtered.filter(product => product.onSale === (appliedFilters.onSale === 'yes'));
+    if (onSale) {
+      filtered = filtered.filter(product => product.onSale === (onSale === 'yes'));
     }
 
-    if (appliedFilters.stockStatus !== '') {
-      filtered = filtered.filter(product => appliedFilters.stockStatus === 'in_stock' ? product.qty > 0 : product.qty === 0);
+    if (stockStatus) {
+      filtered = filtered.filter(product => stockStatus === 'in_stock' ? product.qty > 0 : product.qty === 0);
     }
 
-    if (appliedFilters.productStatus !== '') {
-      filtered = filtered.filter(product => product.status === appliedFilters.productStatus);
+    if (productStatus) {
+      filtered = filtered.filter(product => product.status === productStatus);
     }
 
     setFilteredProducts(filtered);
+    setCurrentPage(1);  // Reset to the first page whenever filters are applied
   };
 
-  // Handle the Apply Filters button click
-  const handleApplyFilters = () => {
-    // Set the applied filters based on the current state
-    setAppliedFilters({
-      onSale,
-      stockStatus,
-      productStatus
-    });
-    // Apply the filter logic
-    filterProducts();
+  // Clear all filters
+  const clearFilters = () => {
+    setProductQuery('');
+    setVendorQuery('');
+    setOnSale('');
+    setStockStatus('');
+    setProductStatus('');
+    setFilteredProducts(products); 
+    setCurrentPage(1); 
   };
 
-  useEffect(() => {
-    // Apply product name and vendor name filtering immediately as the user types
-    filterProducts();
-  }, [productQuery, vendorQuery]);
+  // Get products for the current page
+  const paginateProducts = () => {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    return filteredProducts.slice(startIndex, endIndex);
+  };
+
+  // Change page
+  const changePage = (newPage) => {
+    setCurrentPage(newPage);
+  };
+
+  // Calculate total number of pages
+  const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
+
+  // Generate page numbers for pagination
+  const pageNumbers = [];
+  for (let i = 1; i <= totalPages; i++) {
+    pageNumbers.push(i);
+  }
 
   return (
     <div className="App">
@@ -96,9 +113,38 @@ const App = () => {
         onOnSaleChange={setOnSale}
         onStockStatusChange={setStockStatus}
         onProductStatusChange={setProductStatus}
-        onApplyFilters={handleApplyFilters} // Pass the apply function
+        onApplyFilters={applyFilters}
+        onClearFilters={clearFilters}
+        isFilterApplied={isFilterApplied}  // Pass whether filters are applied
+        onSale={onSale}
+        stockStatus={stockStatus}
+        productStatus={productStatus}
       />
-      <ProductList products={filteredProducts} />
+      <ProductList products={paginateProducts()} />
+
+      {/* Pagination Controls with Page Numbers */}
+      <div className="pagination">
+        <button 
+          onClick={() => changePage(currentPage - 1)} 
+          disabled={currentPage === 1}>
+          Previous
+        </button>
+
+        {pageNumbers.map((number) => (
+          <button 
+            key={number} 
+            onClick={() => changePage(number)}
+            className={number === currentPage ? 'active' : ''}>
+            {number}
+          </button>
+        ))}
+
+        <button 
+          onClick={() => changePage(currentPage + 1)} 
+          disabled={currentPage === totalPages}>
+          Next
+        </button>
+      </div>
     </div>
   );
 };

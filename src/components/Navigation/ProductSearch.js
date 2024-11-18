@@ -1,4 +1,3 @@
-// components/nav/ProductSearch.js
 import React from 'react';
 
 const ProductSearch = ({ productQuery, onProductQueryChange }) => {
@@ -9,7 +8,7 @@ const ProductSearch = ({ productQuery, onProductQueryChange }) => {
         type="text"
         id="product-query"
         value={productQuery}
-        onChange={(e) => onProductQueryChange(e.target.value)}
+        onChange={(e) => onProductQueryChange(e.target.value)} // Update product query
         placeholder="Enter product name or SKU"
       />
     </div>
