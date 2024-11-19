@@ -25,3 +25,24 @@
     color: #721c24;
   }
   
+  .table-header {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    background-color: #f0f8ff;
+  }
+  
+  .selection-header, .table-headers {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  
+  .dropdown-button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+  }
+  
