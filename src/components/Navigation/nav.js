@@ -18,7 +18,9 @@ const Navbar = ({
   onSale,
   stockStatus,
   productStatus,
-  isFilterApplied // Whether filters are applied
+  dateFilter,
+  setDateFilter,
+  filtersApplied 
 }) => {
   return (
     <nav className="navbar">
@@ -30,29 +32,32 @@ const Navbar = ({
         <VendorSearch vendorQuery={vendorQuery} onVendorQueryChange={onVendorQueryChange} />
 
         {/* On Sale filter dropdown */}
-        <OnSaleDropdown 
-          value={onSale} // The dropdown will show the value of `onSale`
-          onOnSaleChange={onOnSaleChange} 
-        />
+        <OnSaleDropdown onSale={onSale} onOnSaleChange={onOnSaleChange} />
 
         {/* Stock Status filter dropdown */}
-        <StockStatusDropdown 
-          value={stockStatus} // The dropdown will show the value of `stockStatus`
-          onStockStatusChange={onStockStatusChange} 
-        />
+        <StockStatusDropdown stockStatus={stockStatus} onStockStatusChange={onStockStatusChange} />
 
         {/* Product Status filter dropdown */}
-        <ProductStatusDropdown 
-          value={productStatus} // The dropdown will show the value of `productStatus`
-          onProductStatusChange={onProductStatusChange} 
-        />
+        <ProductStatusDropdown productStatus={productStatus} onProductStatusChange={onProductStatusChange} />
 
-        {/* Apply Filters Button */}
-        <button className="apply-filters-button" onClick={onApplyFilters}>Apply Filters</button>
+        {/* Date filter input */}
+        <div>
+          <label>Date:</label>
+          <input
+            type="date"
+            value={dateFilter}
+            onChange={(e) => setDateFilter(e.target.value)}
+          />
+        </div>
 
-        {/* Clear Filters Button */}
-        {isFilterApplied && (
-          <button className="clear-filters-button" onClick={onClearFilters}>Clear Filters</button>
+        {/* Apply filters button */}
+        <button onClick={onApplyFilters}>Apply Filters</button>
+
+        {/* Clear filters button */}
+        {filtersApplied && (
+          <>
+            <button className="clear-filters-button" onClick={onClearFilters}>Clear Filters</button>
+          </>
         )}
       </div>
     </nav>

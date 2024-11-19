@@ -24,7 +24,7 @@ const ProductList = ({ products }) => {
                 <td>
                   <img src={product.image} alt={product.sku} style={{ width: '50px' }} />
                 </td>
-                <td>{product.name}<div className='as'>{product.sku}</div></td>
+                <td>{product.name}<div className='as'>{product.sku}</div><div className='product-date'>{product.date}</div></td>
                 <td>{product.status}</td>
                 <td>{product.qty}</td>
                 <td>{product.category}</td>
