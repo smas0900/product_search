@@ -1,4 +1,5 @@
 import React from 'react';
+import './Navbar.css'; 
 import ProductSearch from './ProductSearch';
 import VendorSearch from './VendorSearch';
 import OnSaleDropdown from './OnSale';
@@ -44,7 +45,6 @@ const Navbar = ({
 
         {/* Date filter input */}
         <div>
-          <label>Date:</label>
           <input
             type="date"
             value={dateFilter}

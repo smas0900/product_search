@@ -3,7 +3,7 @@ import React from 'react';
 const VendorSearch = ({ vendorQuery, onVendorQueryChange }) => {
   return (
     <div className="filter">
-      <label htmlFor="vendor-query">Vendor Name or SKU:</label>
+      {/* <label htmlFor="vendor-query">Vendor Name or SKU:</label> */}
       <input
         type="text"
         id="vendor-query"
