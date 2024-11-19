@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './ProductList.css';
 
-const ProductList = ({ products }) => {
+const ProductList = ({ products, setProducts, setFilteredProducts }) => {
   const [selectedProducts, setSelectedProducts] = useState([]);
   const [selectMode, setSelectMode] = useState(false);
 
@@ -11,12 +11,12 @@ const ProductList = ({ products }) => {
   }, [selectedProducts]);
 
   // Handle individual checkbox toggle
-  const handleCheckboxChange = (sku) => {
+  const handleCheckboxChange = (id) => {
     setSelectedProducts((prevSelected) => {
-      if (prevSelected.includes(sku)) {
-        return prevSelected.filter(item => item !== sku); // Unselect product
+      if (prevSelected.includes(id)) {
+        return prevSelected.filter((item) => item !== id); // Unselect product
       } else {
-        return [...prevSelected, sku]; // Select product
+        return [...prevSelected, id]; // Select product
       }
     });
   };
@@ -24,16 +24,43 @@ const ProductList = ({ products }) => {
   // Handle 'Select All' checkbox toggle
   const handleSelectAllChange = (event) => {
     if (event.target.checked) {
-      setSelectedProducts(products.map(product => product.sku)); // Select all
+      setSelectedProducts(products.map((product) => product.id)); // Select all by id
     } else {
       setSelectedProducts([]); // Deselect all
+    }
+  };
+
+  // Handle dropdown action
+  const handleDropdownAction = (action) => {
+    if (action === 'delete') {
+      console.log("Selected products for deletion:", selectedProducts);
+
+      setProducts((prevProducts) => {
+        const remainingProducts = prevProducts.filter(
+          (product) => !selectedProducts.includes(product.id)
+        );
+
+        console.log("Remaining products after deletion:", remainingProducts);
+        return remainingProducts;
+      });
+
+      // Also update the filtered products state
+      setFilteredProducts((prevFilteredProducts) => {
+        const remainingFilteredProducts = prevFilteredProducts.filter(
+          (product) => !selectedProducts.includes(product.id)
+        );
+        return remainingFilteredProducts;
+      });
+
+      setSelectedProducts([]); // Clear selection
+      setSelectMode(false); // Exit selection mode
     }
   };
 
   return (
     <div className="product-list">
       <h2>Product List</h2>
-      
+
       {/* Show dropdown button if any product is selected */}
       <div className="table-header">
         <input
@@ -41,11 +68,17 @@ const ProductList = ({ products }) => {
           checked={selectedProducts.length === products.length}
           onChange={handleSelectAllChange}
         />
-        
+
         {selectMode ? (
           <div className="selection-header">
             <span>{selectedProducts.length} Item{selectedProducts.length > 1 ? 's' : ''} Selected</span>
-            <button className="dropdown-button">Select Action ▼</button>
+            <select
+              className="dropdown-button"
+              onChange={(e) => handleDropdownAction(e.target.value)}
+            >
+              <option value="">Select Action</option>
+              <option value="delete">Delete</option>
+            </select>
           </div>
         ) : (
           // Display regular table headers when no items are selected
@@ -59,18 +92,18 @@ const ProductList = ({ products }) => {
           </div>
         )}
       </div>
-      
+
       {/* Product list remains visible regardless of selection mode */}
       <table className="table table-bordered table-striped">
         <tbody>
           {products.length > 0 ? (
             products.map((product) => (
-              <tr key={product.sku}>
+              <tr key={product.id}>
                 <td>
                   <input
                     type="checkbox"
-                    checked={selectedProducts.includes(product.sku)}
-                    onChange={() => handleCheckboxChange(product.sku)}
+                    checked={selectedProducts.includes(product.id)}
+                    onChange={() => handleCheckboxChange(product.id)}
                   />
                 </td>
                 <td>

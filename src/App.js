@@ -245,7 +245,15 @@ const App = () => {
         </div>
       )}
 
-      <ProductList products={paginateProducts()} />
+      {/* <ProductList products={paginateProducts()} /> */}
+      {/* <ProductList products={paginateProducts()} setProducts={setProducts} /> */}
+
+      <ProductList 
+  products={paginateProducts()} 
+  setProducts={setProducts} 
+  setFilteredProducts={setFilteredProducts} // Pass setFilteredProducts here
+/>
+
 
       <div className="pagination">
         <button

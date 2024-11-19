@@ -23,7 +23,9 @@ const Navbar = ({
   filtersApplied 
 }) => {
   return (
+    
     <nav className="navbar">
+      
       <div className="navbar-content">
         {/* Product Name or SKU search */}
         <ProductSearch productQuery={productQuery} onProductQueryChange={onProductQueryChange} />
