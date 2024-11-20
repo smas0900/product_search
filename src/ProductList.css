@@ -1,0 +1,27 @@
+/* src/components/ProductList.css */
+
+.status {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    color: #fff;
+    text-align: center;
+    width: fit-content;
+  }
+  
+  .status.active {
+    background-color: #cce5ff;
+    color: #004085;
+  }
+  
+  .status.acknowledged {
+    background-color: #ffeeba;
+    color: #856404;
+  }
+  
+  .status.pending {
+    background-color: #f8d7da;
+    color: #721c24;
+  }
+  

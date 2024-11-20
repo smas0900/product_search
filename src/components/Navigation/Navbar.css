@@ -1,0 +1,133 @@
+.navbar {
+    background-color: #f8f9fc;
+    border: 1px solid #ddd;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-family: Arial, sans-serif;
+  }
+
+  .tabs {
+    display: flex;
+    margin-bottom: 15px;
+  }
+  
+  .tab {
+    padding: 10px 20px;
+    cursor: pointer;
+    color: #333;
+    border-bottom: 2px solid transparent;
+  }
+  
+  .tab.active {
+    font-weight: bold;
+    border-color: #007bff;
+  }
+  
+  .navbar-content {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  
+  input,
+  button,
+  select {
+    padding: 8px 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+  }
+  
+  input:focus,
+  button:focus,
+  select:focus {
+    outline: none;
+    border-color: #007bff;
+  }
+  
+  .apply-filters-button {
+    background-color: #000000;
+    color: white;
+    border: none;
+    cursor: pointer;
+    padding: 8px 15px;
+    border-radius: 5px;
+    font-weight: bold;
+    margin-left: 30px;
+  }
+  
+  .apply-button:hover {
+    background-color: #004080;
+    
+  }
+
+  .clear-filters-button {
+    background-color: transparent;
+    color: #358DEB;
+    border: solid 1px;
+  }
+  
+  .clear-button {
+    background-color: #ddd;
+    color: #333;
+    border: none;
+    cursor: pointer;
+    padding: 8px 15px;
+    border-radius: 5px;
+  }
+  
+  .clear-button:hover {
+    background-color: #ccc;
+  }
+  
+  .date-filter {
+    padding: 8px 10px;
+    border-radius: 5px;
+  }
+  
+  /* Navbar.css */
+.tab-container {
+    display: flex;
+    border-bottom: 2px solid #e0e0e0; 
+    margin-bottom: 40px;
+  }
+  
+  .tab-button {
+    background: none;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    color: #777;
+    cursor: pointer;
+    outline: none;
+  }
+  
+  .tab-button.active {
+    color: #000;
+    font-weight: bold;
+    border-bottom: 2px solid #000; 
+  }
+  
+
+  .tab-button:not(.active):hover {
+    color: #555;
+  }
+  
+
+  .applyed-filter {
+    background-color: #E8F4FF;
+    color: #117BEC;
+    font-size: 14px;
+    font-weight: 500;
+    padding-left: 10px;
+    margin-left: 20px;
+
+  }
+
+  .applyed-filter button {
+    background: none;
+    border: none;
+    color: #117BEC;
+
+  }
