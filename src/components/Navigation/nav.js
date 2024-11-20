@@ -21,13 +21,16 @@ const Navbar = ({
   productStatus,
   dateFilter,
   setDateFilter,
-  filtersApplied 
+  filtersApplied,
+  setViewArchived 
 }) => {
   return (
     
     <nav className="navbar">
-      
+       <button onClick={() => setViewArchived(false)}>Main Product List</button>
+       <button onClick={() => setViewArchived(true)}>Archived Products</button>
       <div className="navbar-content">
+        
         {/* Product Name or SKU search */}
         <ProductSearch productQuery={productQuery} onProductQueryChange={onProductQueryChange} />
 

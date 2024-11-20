@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import ProductList from "./components/Products/ProductList";
+import ArchivedProductList from './components/Products/ArchivedProductList';
 import Navbar from "./components/Navigation/nav";
 
 const App = () => {
@@ -12,6 +13,8 @@ const App = () => {
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [filtersApplied, setFiltersApplied] = useState(false);
+  const [archivedProducts, setArchivedProducts] = useState([]);
+  const [viewArchived, setViewArchived] = useState(false);
 
   // State to control when filters should be applied
   const [applyFiltersFlag, setApplyFiltersFlag] = useState(false);
@@ -237,6 +240,8 @@ const App = () => {
         productStatus={productStatus}
         dateFilter={dateFilter}
         setDateFilter={setDateFilter}
+        setViewArchived={setViewArchived}
+
       />
 
       {filtersApplied && (
@@ -247,13 +252,22 @@ const App = () => {
 
       {/* <ProductList products={paginateProducts()} /> */}
       {/* <ProductList products={paginateProducts()} setProducts={setProducts} /> */}
-
+      {viewArchived ? (
+        <ArchivedProductList 
+          archivedProducts={archivedProducts}
+          setArchivedProducts={setArchivedProducts}
+          setProducts={setProducts}
+          setFilteredProducts={setFilteredProducts}
+        />
+      ):(
       <ProductList 
   products={paginateProducts()} 
   setProducts={setProducts} 
-  setFilteredProducts={setFilteredProducts} // Pass setFilteredProducts here
+  setFilteredProducts={setFilteredProducts}
+  archivedProducts={archivedProducts}  // Pass archivedProducts
+  setArchivedProducts={setArchivedProducts}  // Pass setFilteredProducts here
 />
-
+ )}
 
       <div className="pagination">
         <button

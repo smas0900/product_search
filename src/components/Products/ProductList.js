@@ -1,7 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import './ProductList.css';
 
-const ProductList = ({ products, setProducts, setFilteredProducts }) => {
+const ProductList = ({
+  products, 
+  setProducts, 
+  setFilteredProducts,
+  archivedProducts, 
+  setArchivedProducts,
+  paginate = false,  // Flag to handle pagination logic
+}) => {
   const [selectedProducts, setSelectedProducts] = useState([]);
   const [selectMode, setSelectMode] = useState(false);
 
@@ -30,38 +37,65 @@ const ProductList = ({ products, setProducts, setFilteredProducts }) => {
     }
   };
 
-  // Handle dropdown action
+  // Handle dropdown action (delete or archive)
   const handleDropdownAction = (action) => {
     if (action === 'delete') {
-      console.log("Selected products for deletion:", selectedProducts);
-
+      // Delete selected products
       setProducts((prevProducts) => {
         const remainingProducts = prevProducts.filter(
           (product) => !selectedProducts.includes(product.id)
         );
-
-        console.log("Remaining products after deletion:", remainingProducts);
+        setFilteredProducts((prevFilteredProducts) => {
+          return prevFilteredProducts.filter(
+            (product) => !selectedProducts.includes(product.id)
+          );
+        });
         return remainingProducts;
       });
+    }
 
-      // Also update the filtered products state
-      setFilteredProducts((prevFilteredProducts) => {
-        const remainingFilteredProducts = prevFilteredProducts.filter(
+    if (action === 'archive') {
+      // Archive selected products by moving them to the archived list
+      setArchivedProducts((prevArchived) => [
+        ...prevArchived,
+        ...products.filter((product) => selectedProducts.includes(product.id)),
+      ]);
+
+      // Remove archived products from the main product list
+      setProducts((prevProducts) => {
+        const remainingProducts = prevProducts.filter(
           (product) => !selectedProducts.includes(product.id)
         );
-        return remainingFilteredProducts;
+        setFilteredProducts((prevFilteredProducts) => {
+          return prevFilteredProducts.filter(
+            (product) => !selectedProducts.includes(product.id)
+          );
+        });
+        return remainingProducts;
       });
-
-      setSelectedProducts([]); // Clear selection
-      setSelectMode(false); // Exit selection mode
     }
+
+    // Clear selected products after action
+    setSelectedProducts([]);
+    setSelectMode(false);
+  };
+
+  // Paginate products (if pagination is enabled)
+  const paginateProducts = () => {
+    if (!paginate) return products; // If pagination is not enabled, return the full list of products
+
+    const itemsPerPage = 10; // Adjust this value based on your pagination settings
+    const currentPage = 1; // Replace with dynamic page tracking (state)
+
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const paginatedProducts = products.slice(startIndex, startIndex + itemsPerPage);
+    return paginatedProducts;
   };
 
   return (
     <div className="product-list">
       <h2>Product List</h2>
 
-      {/* Show dropdown button if any product is selected */}
       <div className="table-header">
         <input
           type="checkbox"
@@ -78,6 +112,7 @@ const ProductList = ({ products, setProducts, setFilteredProducts }) => {
             >
               <option value="">Select Action</option>
               <option value="delete">Delete</option>
+              <option value="archive">Archive</option> {/* Archive option added */}
             </select>
           </div>
         ) : (
@@ -99,7 +134,7 @@ const ProductList = ({ products, setProducts, setFilteredProducts }) => {
       <table className="table table-bordered table-striped">
         <tbody>
           {products.length > 0 ? (
-            products.map((product) => (
+            paginateProducts().map((product) => (
               <tr key={product.id}>
                 <td></td>
                 <td>
@@ -109,11 +144,7 @@ const ProductList = ({ products, setProducts, setFilteredProducts }) => {
                     onChange={() => handleCheckboxChange(product.id)}
                   />
                 </td>
-                {/* Image Column */}
-                <td>
-                  <img src={product.image} alt={product.sku} className="product-image" />
-                </td>
-                {/* Product Name Column */}
+                {/* Product Details */}
                 <td>
                   <div className="product-n">{product.name}</div>
                   <div className="as">{product.sku}</div>
