@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import ProductList from "./components/Products/ProductList";
-import ArchivedProductList from './components/Products/ArchivedProductList';
+import ArchivedProductList from "./components/Products/ArchivedProductList";
+import './App.css';
 import Navbar from "./components/Navigation/nav";
 
 const App = () => {
@@ -9,7 +10,7 @@ const App = () => {
   const [onSale, setOnSale] = useState("");
   const [stockStatus, setStockStatus] = useState("");
   const [productStatus, setProductStatus] = useState("");
-  const [dateFilter, setDateFilter] = useState("");
+  const [dateFilter, setDateFilter] = useState(null); // Now holds start and end date
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [filtersApplied, setFiltersApplied] = useState(false);
@@ -44,21 +45,19 @@ const App = () => {
 
     let filtered = [...products];
 
-   
-
     if (productQuery || vendorQuery) {
       filtered = filtered.filter((product) => {
         const matchesProductQuery = productQuery
           ? product.name.toLowerCase().includes(productQuery.toLowerCase()) ||
             product.sku.toLowerCase().includes(productQuery.toLowerCase())
           : false;
-    
+
         const matchesVendorQuery = vendorQuery
           ? product.vendor.toLowerCase().includes(vendorQuery.toLowerCase()) ||
             product.sku.toLowerCase().includes(vendorQuery.toLowerCase())
           : false;
-    
-        return matchesProductQuery || matchesVendorQuery;  // Matches either the product or the vendor query
+
+        return matchesProductQuery || matchesVendorQuery; // Matches either the product or the vendor query
       });
     }
 
@@ -79,11 +78,11 @@ const App = () => {
     }
 
     if (dateFilter) {
-      filtered = filtered.filter(
-        (product) =>
-          new Date(product.date).toLocaleDateString() ===
-          new Date(dateFilter).toLocaleDateString()
-      );
+      const { startDate, endDate } = dateFilter;
+      filtered = filtered.filter((product) => {
+        const productDate = new Date(product.date);
+        return productDate >= new Date(startDate) && productDate <= new Date(endDate);
+      });
     }
 
     setFilteredProducts(filtered);
@@ -107,7 +106,7 @@ const App = () => {
     setOnSale("");
     setStockStatus("");
     setProductStatus("");
-    setDateFilter("");
+    setDateFilter(null);
     setFilteredProducts(products); // Reset to the original product list
     setCurrentPage(1);
     setFiltersApplied(false); // Reset filters applied state
@@ -133,7 +132,7 @@ const App = () => {
         setProductStatus("");
         break;
       case "dateFilter":
-        setDateFilter("");
+        setDateFilter(null);
         break;
       default:
         break;
@@ -214,7 +213,8 @@ const App = () => {
     if (dateFilter) {
       filters.push(
         <span key="dateFilter">
-          Date: {new Date(dateFilter).toLocaleDateString()}{" "}
+          Date Range: {new Date(dateFilter.startDate).toLocaleDateString()} -{" "}
+          {new Date(dateFilter.endDate).toLocaleDateString()}{" "}
           <button onClick={() => removeFilter("dateFilter")}>X</button>
         </span>
       );
@@ -235,15 +235,13 @@ const App = () => {
         onProductStatusChange={setProductStatus}
         onApplyFilters={() => setApplyFiltersFlag(true)} // Apply filters when button clicked
         onClearFilters={clearFilters}
-        isFilterApplied={filtersApplied}
         filtersApplied={filtersApplied}
         onSale={onSale}
         stockStatus={stockStatus}
         productStatus={productStatus}
         dateFilter={dateFilter}
-        setDateFilter={setDateFilter}
+        setDateFilter={setDateFilter} // Now passes date range
         setViewArchived={setViewArchived}
-
       />
 
       {filtersApplied && (
@@ -252,24 +250,22 @@ const App = () => {
         </div>
       )}
 
-      {/* <ProductList products={paginateProducts()} /> */}
-      {/* <ProductList products={paginateProducts()} setProducts={setProducts} /> */}
       {viewArchived ? (
-        <ArchivedProductList 
+        <ArchivedProductList
           archivedProducts={archivedProducts}
           setArchivedProducts={setArchivedProducts}
           setProducts={setProducts}
           setFilteredProducts={setFilteredProducts}
         />
-      ):(
-      <ProductList 
-  products={paginateProducts()} 
-  setProducts={setProducts} 
-  setFilteredProducts={setFilteredProducts}
-  archivedProducts={archivedProducts}  // Pass archivedProducts
-  setArchivedProducts={setArchivedProducts}  // Pass setFilteredProducts here
-/>
- )}
+      ) : (
+        <ProductList
+          products={paginateProducts()}
+          setProducts={setProducts}
+          setFilteredProducts={setFilteredProducts}
+          archivedProducts={archivedProducts} // Pass archivedProducts
+          setArchivedProducts={setArchivedProducts} // Pass setFilteredProducts here
+        />
+      )}
 
       <div className="pagination">
         <button

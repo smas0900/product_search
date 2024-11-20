@@ -1,5 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './Navbar.css'; 
+import { DateRangePicker } from 'react-date-range';
+import 'react-date-range/dist/styles.css';
+import 'react-date-range/dist/theme/default.css';
 import ProductSearch from './ProductSearch';
 import VendorSearch from './VendorSearch';
 import OnSaleDropdown from './OnSale';
@@ -15,54 +18,70 @@ const Navbar = ({
   onStockStatusChange,
   onProductStatusChange,
   onApplyFilters,
-  onClearFilters, // Clear filters function
+  onClearFilters,
   onSale,
   stockStatus,
   productStatus,
-  dateFilter,
   setDateFilter,
   filtersApplied,
-  setViewArchived 
+  setViewArchived,
 }) => {
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [dateRange, setDateRange] = useState([
+    {
+      startDate: new Date(),
+      endDate: new Date(),
+      key: 'selection',
+    },
+  ]);
+
+  const handleDateSelect = (ranges) => {
+    const { startDate, endDate } = ranges.selection;
+    setDateRange([{ ...ranges.selection }]);
+    setDateFilter({ startDate, endDate });
+  };
+
+  const formatDate = (date) => {
+    return date.toLocaleDateString('en-US', {
+      month: '2-digit',
+      day: '2-digit',
+      year: '2-digit',
+    });
+  };
+
   return (
-    
     <nav className="navbar">
-       <button onClick={() => setViewArchived(false)}>Main Product List</button>
-       <button onClick={() => setViewArchived(true)}>Archived Products</button>
+      <button onClick={() => setViewArchived(false)}>Main Product List</button>
+      <button onClick={() => setViewArchived(true)}>Archived Products</button>
       <div className="navbar-content">
         
-        {/* Product Name or SKU search */}
         <ProductSearch productQuery={productQuery} onProductQueryChange={onProductQueryChange} />
-
-        {/* Vendor Name or SKU search */}
         <VendorSearch vendorQuery={vendorQuery} onVendorQueryChange={onVendorQueryChange} />
-
-        {/* On Sale filter dropdown */}
         <OnSaleDropdown onSale={onSale} onOnSaleChange={onOnSaleChange} />
-
-        {/* Stock Status filter dropdown */}
         <StockStatusDropdown stockStatus={stockStatus} onStockStatusChange={onStockStatusChange} />
-
-        {/* Product Status filter dropdown */}
         <ProductStatusDropdown productStatus={productStatus} onProductStatusChange={onProductStatusChange} />
 
-        {/* Date filter input */}
-        <div>
-          <input
-            type="date"
-            value={dateFilter}
-            onChange={(e) => setDateFilter(e.target.value)}
-          />
+        {/* Date Range Picker */}
+        <div className="date-range-picker">
+          <button className="date-button" onClick={() => setShowDatePicker(!showDatePicker)}>
+            <i className="fa fa-calendar"></i>{' '}
+            {formatDate(dateRange[0].startDate)} - {formatDate(dateRange[0].endDate)}
+          </button>
+          {showDatePicker && (
+            <DateRangePicker
+              ranges={dateRange}
+              onChange={handleDateSelect}
+              showSelectionPreview={true}
+              moveRangeOnFirstSelection={false}
+              editableDateInputs={true}
+            />
+          )}
         </div>
 
-        {/* Apply filters button */}
         <button onClick={onApplyFilters}>Apply Filters</button>
 
-        {/* Clear filters button */}
         {filtersApplied && (
-          <>
-            <button className="clear-filters-button" onClick={onClearFilters}>Clear Filters</button>
-          </>
+          <button className="clear-filters-button" onClick={onClearFilters}>Clear Filters</button>
         )}
       </div>
     </nav>
