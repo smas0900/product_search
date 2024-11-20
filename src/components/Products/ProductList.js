@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import './ProductList.css';
+import React, { useState, useEffect } from "react";
+import "./ProductList.css";
 
 const ProductList = ({
-  products, 
-  setProducts, 
+  products,
+  setProducts,
   setFilteredProducts,
-  archivedProducts, 
+  archivedProducts,
   setArchivedProducts,
-  paginate = false,  // Flag to handle pagination logic
+  paginate = false, // Flag to handle pagination logic
 }) => {
   const [selectedProducts, setSelectedProducts] = useState([]);
   const [selectMode, setSelectMode] = useState(false);
@@ -39,7 +39,7 @@ const ProductList = ({
 
   // Handle dropdown action (delete or archive)
   const handleDropdownAction = (action) => {
-    if (action === 'delete') {
+    if (action === "delete") {
       // Delete selected products
       setProducts((prevProducts) => {
         const remainingProducts = prevProducts.filter(
@@ -54,7 +54,7 @@ const ProductList = ({
       });
     }
 
-    if (action === 'archive') {
+    if (action === "archive") {
       // Archive selected products by moving them to the archived list
       setArchivedProducts((prevArchived) => [
         ...prevArchived,
@@ -88,7 +88,10 @@ const ProductList = ({
     const currentPage = 1; // Replace with dynamic page tracking (state)
 
     const startIndex = (currentPage - 1) * itemsPerPage;
-    const paginatedProducts = products.slice(startIndex, startIndex + itemsPerPage);
+    const paginatedProducts = products.slice(
+      startIndex,
+      startIndex + itemsPerPage
+    );
     return paginatedProducts;
   };
 
@@ -105,14 +108,18 @@ const ProductList = ({
 
         {selectMode ? (
           <div className="selection-header">
-            <span>{selectedProducts.length} Item{selectedProducts.length > 1 ? 's' : ''} Selected</span>
+            <span>
+              {selectedProducts.length} Item
+              {selectedProducts.length > 1 ? "s" : ""} Selected
+            </span>
             <select
               className="dropdown-button"
               onChange={(e) => handleDropdownAction(e.target.value)}
             >
               <option value="">Select Action</option>
               <option value="delete">Delete</option>
-              <option value="archive">Archive</option> {/* Archive option added */}
+              <option value="archive">Archive</option>{" "}
+              {/* Archive option added */}
             </select>
           </div>
         ) : (
@@ -120,12 +127,12 @@ const ProductList = ({
           <div className="table-headers">
             <span></span>
 
-            <span className='pn'>Product Name</span>
-            <span className='pnstatus'>Status</span>
-            <span className='pnq'>Quantity</span>
-            <span className='pnc'>Category</span>
-            <span className='pns'>On Sale</span>
-            <span className='pnv'>Vendor</span>
+            <span className="pn">Product Name</span>
+            <span className="pnstatus">Status</span>
+            <span className="pnq">Quantity</span>
+            <span className="pnc">Category</span>
+            <span className="pns">On Sale</span>
+            <span className="pnv">Vendor</span>
           </div>
         )}
       </div>
@@ -144,7 +151,14 @@ const ProductList = ({
                     onChange={() => handleCheckboxChange(product.id)}
                   />
                 </td>
-                {/* Product Details */}
+                {/* Image Column */}
+                <td>
+                  <img
+                    src={product.image}
+                    alt={product.sku}
+                    className="product-image"
+                  />
+                </td>{" "}
                 <td>
                   <div className="product-n">{product.name}</div>
                   <div className="as">{product.sku}</div>
@@ -153,7 +167,7 @@ const ProductList = ({
                 <td className="product-al">{product.status}</td>
                 <td className="product-al">{product.qty}</td>
                 <td className="product-al">{product.category}</td>
-                <td className="product-al">{product.onSale ? 'Yes' : 'No'}</td>
+                <td className="product-al">{product.onSale ? "Yes" : "No"}</td>
                 <td className="product-al">{product.vendor}</td>
               </tr>
             ))

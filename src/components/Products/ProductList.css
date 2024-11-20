@@ -5,7 +5,7 @@ src/components/ProductList.css .status {
   font-size: 0.9rem;
   color: #fff;
   text-align: center;
-  width: fit-content;
+  width: fit-content; 
 }
 
 .status.active {
