@@ -44,20 +44,22 @@ const App = () => {
 
     let filtered = [...products];
 
-    if (productQuery) {
-      filtered = filtered.filter(
-        (product) =>
-          product.name.toLowerCase().includes(productQuery.toLowerCase()) ||
-          product.sku.toLowerCase().includes(productQuery.toLowerCase())
-      );
-    }
+   
 
-    if (vendorQuery) {
-      filtered = filtered.filter(
-        (product) =>
-          product.vendor.toLowerCase().includes(vendorQuery.toLowerCase()) ||
-          product.sku.toLowerCase().includes(vendorQuery.toLowerCase())
-      );
+    if (productQuery || vendorQuery) {
+      filtered = filtered.filter((product) => {
+        const matchesProductQuery = productQuery
+          ? product.name.toLowerCase().includes(productQuery.toLowerCase()) ||
+            product.sku.toLowerCase().includes(productQuery.toLowerCase())
+          : false;
+    
+        const matchesVendorQuery = vendorQuery
+          ? product.vendor.toLowerCase().includes(vendorQuery.toLowerCase()) ||
+            product.sku.toLowerCase().includes(vendorQuery.toLowerCase())
+          : false;
+    
+        return matchesProductQuery || matchesVendorQuery;  // Matches either the product or the vendor query
+      });
     }
 
     if (onSale) {
@@ -166,7 +168,7 @@ const App = () => {
     if (productQuery) {
       filters.push(
         <span key="productQuery">
-          Product: {productQuery}{" "}
+          Product or SKU: {productQuery}{" "}
           <button onClick={() => removeFilter("productQuery")}>X</button>
         </span>
       );
@@ -175,7 +177,7 @@ const App = () => {
     if (vendorQuery) {
       filters.push(
         <span key="vendorQuery">
-          Vendor: {vendorQuery}{" "}
+          Vendor or SKU: {vendorQuery}{" "}
           <button onClick={() => removeFilter("vendorQuery")}>X</button>
         </span>
       );
