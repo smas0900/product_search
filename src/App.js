@@ -80,11 +80,11 @@ const App = () => {
     }
 
     if (dateFilter) {
-      filtered = filtered.filter(
-        (product) =>
-          new Date(product.date).toLocaleDateString() ===
-          new Date(dateFilter).toLocaleDateString()
-      );
+      const { startDate, endDate } = dateFilter;
+      filtered = filtered.filter((product) => {
+        const productDate = new Date(product.date);
+        return productDate >= new Date(startDate) && productDate <= new Date(endDate);
+      });
     }
 
     setFilteredProducts(filtered);
@@ -215,7 +215,8 @@ const App = () => {
     if (dateFilter) {
       filters.push(
         <span className="applyed-filter" key="dateFilter">
-          Date: {new Date(dateFilter).toLocaleDateString()}{" "}
+          Date Range: {new Date(dateFilter.startDate).toLocaleDateString()} -{" "}
+          {new Date(dateFilter.endDate).toLocaleDateString()}{" "}
           <button onClick={() => removeFilter("dateFilter")}>X</button>
         </span>
       );
@@ -267,8 +268,8 @@ const App = () => {
   products={paginateProducts()} 
   setProducts={setProducts} 
   setFilteredProducts={setFilteredProducts}
-  archivedProducts={archivedProducts}  // Pass archivedProducts
-  setArchivedProducts={setArchivedProducts}  // Pass setFilteredProducts here
+  archivedProducts={archivedProducts} 
+  setArchivedProducts={setArchivedProducts}  // Pass setFilteredProducts 
 />
  )}
 
