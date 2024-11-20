@@ -82,10 +82,10 @@ const ProductList = ({
 
   // Paginate products (if pagination is enabled)
   const paginateProducts = () => {
-    if (!paginate) return products; // If pagination is not enabled, return the full list of products
+    if (!paginate) return products; 
 
-    const itemsPerPage = 10; // Adjust this value based on your pagination settings
-    const currentPage = 1; // Replace with dynamic page tracking (state)
+    const itemsPerPage = 3;
+    const currentPage = 1; 
 
     const startIndex = (currentPage - 1) * itemsPerPage;
     const paginatedProducts = products.slice(
@@ -97,7 +97,6 @@ const ProductList = ({
 
   return (
     <div className="product-list">
-      <h2>Product List</h2>
 
       <div className="table-header">
         <input
@@ -147,11 +146,11 @@ const ProductList = ({
                 <td>
                   <input
                     type="checkbox"
+                    className="checkbox-list"
                     checked={selectedProducts.includes(product.id)}
                     onChange={() => handleCheckboxChange(product.id)}
                   />
                 </td>
-                {/* Image Column */}
                 <td>
                   <img
                     src={product.image}
@@ -168,7 +167,7 @@ const ProductList = ({
                 <td className="product-al">{product.qty}</td>
                 <td className="product-al">{product.category}</td>
                 <td className="product-al">{product.onSale ? "Yes" : "No"}</td>
-                <td className="product-al">{product.vendor}</td>
+                <td className="product-al pro-vender">{product.vendor}</td>
               </tr>
             ))
           ) : (
