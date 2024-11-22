@@ -86,8 +86,12 @@ const ArchivedProductList = ({ archivedProducts, setArchivedProducts, setProduct
       ) : (
         <p>No archived products found.</p>
       )}
+<br></br><br></br>
+      <p>Main tab product list</p>
     </div>
+    
   );
+  
 };
 
 export default ArchivedProductList;

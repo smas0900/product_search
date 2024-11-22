@@ -99,12 +99,18 @@ const Navbar = ({
           </button>
           {showDatePicker && (
             <DateRangePicker
-              ranges={dateRange}
-              onChange={handleDateSelect}
-              showSelectionPreview={true}
-              moveRangeOnFirstSelection={false}
-              editableDateInputs={true}
-            />
+            ranges={dateRange}
+            onChange={handleDateSelect}
+            showSelectionPreview={true}
+            moveRangeOnFirstSelection={false}
+            months={1} 
+            direction="horizontal"
+            rangeColors={["#3d91c2"]} 
+            staticRanges={[]}
+            inputRanges={[]}
+            showMonthAndYearPickers={true} 
+            showDateDisplay={true}
+          />
           )}
         </div>
 
