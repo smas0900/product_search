@@ -157,7 +157,6 @@ select:focus {
   margin-top: 8px;
 }
 
-/* Optional: Hide today/yesterday buttons inside the calendar */
 .rdrTodayButton {
   display: none;
 }
